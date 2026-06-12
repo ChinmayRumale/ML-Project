@@ -6,3 +6,4 @@ __pycache__/
 mlruns/
 monitoring/*.html
 .pytest_cache/
+.claude/
