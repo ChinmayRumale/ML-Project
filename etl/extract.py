@@ -13,9 +13,42 @@ def get_dataset_path():
     dataset_path = os.getenv('DATASET_PATH')
     if not dataset_path:
         return None
-    dataset_path = os.path.expandvars(dataset_path)
-    dataset_path = os.path.expanduser(dataset_path)
-    return Path(dataset_path)
+
+    expanded_path = os.path.expandvars(dataset_path)
+    expanded_path = os.path.expanduser(expanded_path)
+    candidates = [Path(expanded_path)]
+
+    if Path(expanded_path).name:
+        candidates.append(Path(Path(expanded_path).name))
+
+    candidate_names = [
+        Path(expanded_path).name,
+        'online_shoppers_intention__1_.csv',
+        'online_shoppers_intention.csv',
+        'online_shoppers.csv',
+        'dataset.csv',
+    ]
+
+    search_dirs = [
+        Path.cwd(),
+        Path(__file__).resolve().parents[1],
+        Path.home(),
+        Path.home() / 'Desktop',
+    ]
+
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+
+    for name in candidate_names:
+        if not name:
+            continue
+        for directory in search_dirs:
+            candidate = directory / name
+            if candidate.exists():
+                return candidate
+
+    return None
 
 
 def get_engine():

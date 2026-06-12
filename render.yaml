@@ -8,6 +8,7 @@ services:
     plan: free  # render free tier
     region: oregon  # render region
     branch: main  # deploy from main branch
+    healthCheckPath: /health
 
     envVars:
       - key: MLFLOW_TRACKING_URI
